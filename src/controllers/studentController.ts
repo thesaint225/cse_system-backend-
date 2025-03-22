@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Student from "../models/students";
+import Student from "../models/Students";
 import { MongoServerError } from "mongodb";
 
 // @description show all users
@@ -38,7 +38,7 @@ export const createStudent = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof MongoServerError) {
       res.status(400).json({
-        success: true,
+        success: false,
         message: `Duplicate key error: ${JSON.stringify(error.keyValue)}`,
         details: error.errmsg,
       });
