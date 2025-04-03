@@ -1,0 +1,58 @@
+[
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "role": "student",
+    "studentInfo": {
+      "bio": "A passionate learner interested in programming.",
+      "profilePicture": "https://example.com/profile/john.jpg",
+      "history": [
+        "Completed JavaScript Course",
+        "Participated in Hackathon 2023"
+      ]
+    }
+  },
+  {
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "password": "securepassword",
+    "role": "admin",
+    "studentInfo": {
+      "bio": "Admin role, managing student data.",
+      "profilePicture": "https://example.com/profile/jane.jpg",
+      "history": [
+        "Managing students",
+        "Completed Node.js project management training"
+      ]
+    }
+  },
+  {
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "password": "alicepass123",
+    "role": "student",
+    "studentInfo": {
+      "bio": "Studying full-stack development.",
+      "profilePicture": "https://example.com/profile/alice.jpg",
+      "history": [
+        "Completed React.js Bootcamp",
+        "Contributed to open-source projects"
+      ]
+    }
+  },
+  {
+    "name": "Bob Williams",
+    "email": "bob.williams@example.com",
+    "password": "bobby123",
+    "role": "student",
+    "studentInfo": {
+      "bio": "Exploring AI and Machine Learning.",
+      "profilePicture": "https://example.com/profile/bob.jpg",
+      "history": [
+        "Completed Data Science course",
+        "Participated in AI Challenge 2023"
+      ]
+    }
+  }
+]

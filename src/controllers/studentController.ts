@@ -3,6 +3,7 @@ import Student from "../models/Students";
 import { asyncHandler } from "../help/asyncHandler";
 import mongoose, { Error } from "mongoose";
 import ErrorResponse from "../help/errorResponse";
+import { studentSchema } from "../validadators/stusentsValidator";
 
 // @description show all users
 // @route api/v1/students
@@ -22,13 +23,25 @@ export const getStudents = asyncHandler(
 // @route       api/v1/students/:id
 // @access      public
 
-export const getStudent = (req: Request, res: Response) => {
-  const { id } = req.params;
-  res.status(200).json({
-    success: "true",
-    message: `show student ${id} `,
-  });
-};
+export const getStudent = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new ErrorResponse(`Invalid ID: ${id}`, 400));
+    }
+
+    const getStudent = await Student.findById(id);
+
+    if (!getStudent) {
+      return next(new ErrorResponse(`No student found with ID: ${id}`, 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: `show student ${id} `,
+      data: getStudent,
+    });
+  }
+);
 
 // @description  create student
 // @route        api/v1/students/
@@ -36,7 +49,15 @@ export const getStudent = (req: Request, res: Response) => {
 
 export const createStudent = asyncHandler(
   async (req: Request, res: Response, _next: NextFunction) => {
-    const student = await Student.create(req.body);
+    // valid request body using zod
+    const validationResult = studentSchema.safeParse(req.body);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        error: validationResult.error.format(),
+      });
+    }
+    const student = await Student.create(validationResult);
     res.status(201).json({
       success: true,
       data: student,
@@ -56,12 +77,25 @@ export const updateStudent = asyncHandler(
       return next(new ErrorResponse(`Invalid ID: ${id}`, 400));
     }
 
-    const updateStudent = await Student.findByIdAndUpdate(id, req.body, {
-      // return the updated student
-      new: true,
-      // Ensure update follows  schemaValidation
-      runValidators: true,
-    });
+    // valid request body using zod
+    const validationResult = studentSchema.safeParse(req.body);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        error: validationResult.error.format(),
+      });
+    }
+
+    const updateStudent = await Student.findByIdAndUpdate(
+      id,
+      validationResult,
+      {
+        // return the updated student
+        new: true,
+        // Ensure update follows  schemaValidation
+        runValidators: true,
+      }
+    );
     if (!updateStudent) {
       return next(new ErrorResponse(`No student found with ID: ${id}`, 400));
     }
