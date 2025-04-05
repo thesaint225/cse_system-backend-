@@ -33,7 +33,7 @@ mongoose
 
 //    read JSON files
 
-const studentFilepath = path.join(__dirname, "../data", "student.json");
+const studentFilepath = path.join(__dirname, "../_data", "student.json");
 
 if (!fs.existsSync(studentFilepath)) {
   console.error(`❌ File not found: ${studentFilepath}`);
@@ -77,6 +77,7 @@ validateData(students, studentSchema);
 const importData = async () => {
   try {
     await Student.insertMany(students);
+    console.log("🚀 Data imported  Successfully...");
   } catch (error) {
     if (error instanceof Error) {
       console.error("❌ Data Import Failed:, error.message");
@@ -103,3 +104,10 @@ const deleteData = async () => {
     process.exit(1);
   }
 };
+
+// Run Seeder Script Based on CLI Command
+if (process.argv[2] === "-i") {
+  importData();
+} else if (process.argv[2] === "-d") {
+  deleteData();
+}

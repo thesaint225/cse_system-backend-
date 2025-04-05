@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.ts "
+    "dev": "nodemon src/index.ts ",
+    "seed:import": "ts-node src/seeder/seed.ts -i",
+    "seed:delete": "ts-node src/seeder/seed.ts -d"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,8 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
-    "@types/morgan": "^1.9.9"
+    "@types/morgan": "^1.9.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
