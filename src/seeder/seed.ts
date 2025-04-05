@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
-import { StudentType } from "../validadators/studentsValidator";
+import { studentSchema } from "../validadators/studentsValidator";
 import Student from "../models/Students";
 import { z } from "zod";
 import path from "path";
@@ -48,3 +48,58 @@ try {
   console.error("❌ Error reading JSON file:", error);
   process.exit(1);
 }
+
+// validating data before importing
+
+const validateData = <T>(data: unknown[], schema: z.ZodSchema<T>) => {
+  // validate each items
+  const result = data.map((item) => schema.safeParse(item));
+
+  //  find invalid items
+  const invalidItems = result.filter((r) => !result);
+
+  //   if there are errors , log them and stop the process
+
+  if (invalidItems.length > 0) {
+    console.error("❌ Invalid Data Found:", invalidItems);
+
+    invalidItems.forEach((item, index) => {
+      console.error(`Error ${index + 1}:`, item.error?.format());
+    });
+
+    process.exit(1);
+  }
+};
+
+validateData(students, studentSchema);
+
+// import data
+const importData = async () => {
+  try {
+    await Student.insertMany(students);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("❌ Data Import Failed:, error.message");
+    } else {
+      console.error("❌ Data Import Failed:", error);
+    }
+    process.exit(1);
+  }
+};
+
+// delete delete
+const deleteData = async () => {
+  try {
+    await Student.deleteMany();
+    console.log("🚀 Data Deleted Successfully...");
+    process.exit();
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("❌ Data Deletion Failed:", error.message);
+    } else {
+      console.error("❌ Data Deletion Failed:", error);
+    }
+
+    process.exit(1);
+  }
+};

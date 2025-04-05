@@ -3,7 +3,7 @@ import Student from "../models/Students";
 import { asyncHandler } from "../help/asyncHandler";
 import mongoose, { Error } from "mongoose";
 import ErrorResponse from "../help/errorResponse";
-import { studentSchema } from "../validadators/stusentsValidator";
+import { studentSchema } from "../validadators/studentsValidator";
 
 // @description show all users
 // @route api/v1/students
